@@ -1,0 +1,35 @@
+.i {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.i-search {
+    background-image: url(../icons/search.svg);
+}
+
+.i-home {
+    background-image: url(../icons/home.svg);
+}
+
+.i-home-active {
+    background-image: url(../icons/home-active.svg);
+}
+
+.i-cart {
+    background-image: url(../icons/cart.svg);
+}
+
+.i-cart-active {
+    background-image: url(../icons/cart-active.svg);
+}
+
+.i-remove {
+    background-image: url(../icons/remove.svg);
+}
+
+.i-promo {
+    background-image: url(../icons/promo.svg);
+}

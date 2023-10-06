@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Активные заказы
+{% endblock title %}
+
+{% block content %}
+<div class="orders" style="margin-top: 20px;">
+    {% for order in object_list %}
+    <div class="orders__item">
+        <div class="orders__item-header">
+            Заказ №{{order.pk}}
+        </div>
+        <div class="orders__item-content">
+            <div class="cart_items" style="margin-top: -20px;"> 
+            {% for item in order.items.all %}
+            <div class="cart_items-item">
+                <div class="cart_items-item_image" 
+                style="{% if item.product.image %}background-image: url({{item.product.image.url}});{% endif %}"></div>
+                <div class="cart_items-item_info">
+                    <div class="cart_items-item_name">{{item.product.name}}</div>
+                    <div class="counter" style="pointer-events: none;">
+                        <span class="counter__btn" style="opacity: .5;">-</span>
+                        <span class="counter__count" id="count">{{item.count}}</span>
+                        <span class="counter__btn" style="opacity: .5;">+</span>
+                    </div>
+                </div>
+                <div class="cart_items-item_price">
+                    <div class="price">
+                        {{item.price}}
+                        <div class="price__min">Р</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+            <div class="cart_sum">
+                <div class="cart_sum-item big">
+                    <div class="left">Итог</div>
+                    <div class="right">{{order.amount}} Р</div>
+                </div>
+                {% if object.promocode %}
+                <div class="cart_sum-item">
+                    <div class="left">Промокод</div>
+                    <div class="right">{{order.promocode.code}}</div>
+                </div>
+                {% endif %}
+                <div class="cart_sum-item">
+                    <div class="left">Имя</div>
+                    <div class="right">{{order.name}}</div>
+                </div>
+                <div class="cart_sum-item">
+                    <div class="left">Номер</div>
+                    <div class="right">{{order.phone}}</div>
+                </div>
+                <div class="cart_sum-item">
+                    <div class="left">Статус</div>
+                    <div class="right" id="status__name">{{order.get_status_display}}</div>
+                </div>
+            </div>
+            <div class="status">
+                <div class="status__btn" {% if not order.is_created %}style="display: none;"{% endif %} data-status="new">
+                    <button class="btn" data-order-toproccess="{{order.id}}" data-status-name="В работе">В работу</button>
+                </div>
+                <div class="status__btn" {% if not order.is_proccess %}style="display: none;"{% endif %} data-status="proccess">
+                    <button class="btn" data-order-tocomplete="{{order.id}}" data-status-name="Выполнен">Выполнен</button>
+                    <button class="btn" data-order-tocancel="{{order.id}}" data-status-name="Отменен">Отменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

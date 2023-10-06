@@ -1,0 +1,91 @@
+{% if not items %}
+<div class="alert alert-info" style="margin-top: 25px;">
+    Вы ничего не добавили в корзину. Пожалуйста добавьте товары
+</div>
+{% else %}
+<form action="" id="cartForm" method="POST">
+    <input type="hidden" name="action" value="new">
+    {% csrf_token %}
+    <div class="cart_items">
+        {% for object in items %}
+        <div class="cart_items-item">
+            <div class="cart_items-item_image" 
+            style="{% if object.product.image %}background-image: url({{object.product.image.url}});{% endif %}"></div>
+            <div class="cart_items-item_info">
+                <div class="cart_items-item_name">{{object.product.name}}</div>
+                <div class="counter" data-counter-product="{{object.product.id}}">
+                    <span class="counter__btn" id="mincount">-</span>
+                    <span class="counter__count" id="count">{{object.count}}</span>
+                    <span class="counter__btn" id="addcount">+</span>
+                </div>
+            </div>
+            <div class="cart_items-item_price">
+                <div class="price">
+                    {{object.product.price}}
+                    <div class="price__min">Р</div>
+                </div>
+            </div>
+            <input name="product_{{object.product.pk}}" value="{{object.count}}" type="hidden" />
+        </div>
+        {% endfor %}
+    </div>
+    <div class="cart__btn">
+        <button class="btn transparent" type="button" id="clearCart">
+            <span class="i i-remove"></span> Очистить
+        </button>
+    </div>
+    <div class="promocode">
+        <div class="title">Промокод</div>
+        <div class="promocode__content">
+            <div class="input">
+                <input type="hidden" name="promo" {% if promo %}value="{{promo.code}}"{% endif %}>
+                <span class="i i-promo"></span>
+                <input type="text" id="usePromo__value" class="input__input" {% if promo %}disabled{% endif %} value="{% if promo %}{{promo.code}}{% endif %}" name="promo" placeholder="Ваш код">
+                <button class="btn" type="button" {% if promo %}id="delPromo"{% else %}id="usePromo"{% endif %}>
+                    {% if promo %}
+                    УБРАТЬ
+                    {% else %}
+                    ОК
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+        <div class="alert alert-error" id="promoError">
+            Промокод не найден
+        </div>
+        {% if promo %}
+        <div class="alert alert-info" id="promoValue" style="margin-top: 10px;">
+            Промокод: {{promo.discount}}%
+        </div>
+        {% endif %}
+    </div>
+    <div class="cart_inputs">
+        <div class="input">
+            <input type="text" class="input__input" name="name" placeholder="Имя">
+        </div>
+        <div class="input" style="margin-top: 5px;">
+            <input type="phone" class="input__input" name="phone" placeholder="Номер телефона">
+        </div>
+        <div class="alert alert-error" id="cartError" style="margin-top: 10px;">
+            Заполните имя и номер телефона
+        </div>
+    </div>
+    <div class="cart_sum">
+        <div class="cart_sum-item big">
+            <div class="left">Итог</div>
+            <div class="right">{{total_with_discount}} Р</div>
+        </div>
+        <div class="cart_sum-item">
+            <div class="left">Еда</div>
+            <div class="right">{{total}} Р</div>
+        </div>
+        <div class="cart_sum-item">
+            <div class="left">Скидка</div>
+            <div class="right">{{discount_amount}} Р</div>
+        </div>
+    </div>
+    <div class="cart_btn">
+        <button class="btn">Оформить заказ</button>
+    </div>
+</form>
+{% endif %}
